@@ -1,8 +1,21 @@
 package tictactoe;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+
+    public static int n; // the size of the board
+
+    // create an empty board
+    public static char[][] createBoard() {
+        n = 3;
+        char[][] game = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(game[i], ' ');
+        }
+        return game;
+    }
+
 
     // read the string from input and turn into 2d array
     public static char[][] readMatrix() {
@@ -167,7 +180,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        char[][] newGame = readMatrix();
+        char[][] newGame = createBoard();
 
         draw(newGame);
         launchCycle(newGame);
