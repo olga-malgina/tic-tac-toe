@@ -17,7 +17,8 @@ public class Main {
     }
 
 
-    // read the string from input and turn into 2d array
+    // read the string from input and turn into 2d array -
+    // TODO: comment this code as the matrix won't be read from input
     public static char[][] readMatrix() {
         System.out.print("Enter cells: ");
 
@@ -75,47 +76,42 @@ public class Main {
 
 
     // calculate current state of the game
-    public static void calcState(char[][] game) {
+    public static String calcState(char[][] game) {
         char result;
 
         if (game[0][0] == game [1][1] && game [0][0] == game[2][2] && game[0][0] != ' ') {
             result = game[0][0];
-            System.out.println(result + " wins");
-            return;
+            return result + " wins";
         }
 
         if (game[0][2] == game [1][1] && game [0][2] == game[2][0] && game[0][2] != ' ') {
             result = game[0][2];
-            System.out.println(result + " wins");
-            return;
+            return result + " wins";
         }
 
         for (int i = 0; i < 3; i++) {
             if (game[i][0] == game[i][1] && game[i][0] == game[i][2] && game[i][0] != ' ') {
                 result = game[i][0];
-                System.out.println(result + " wins");
-                return;
+                return result + " wins";
             }
         }
 
         for (int j = 0; j < 3; j++) {
             if (game[0][j] == game[1][j] && game[0][j] == game[2][j] && game[0][j] != ' ') {
                 result = game[0][j];
-                System.out.println(result + " wins");
-                return;
+                return result + " wins";
             }
         }
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (game[i][j] == ' ') {
-                    System.out.println("Game not finished");
-                    return;
+                    return "Game not finished";
                 }
             }
         }
 
-        System.out.println("Draw");
+        return "Draw";
     }
 
     // determine whose move is next (X or O)
@@ -148,8 +144,24 @@ public class Main {
         }
     }
 
+    // make computer easy move
+    public static void computerMakeMove(char[][] game) {
+        while (true) {
+
+            Random random = new Random();
+            int i = random.nextInt(n - 1 + 1) + 1;
+            int j = random.nextInt(n - 1 + 1) + 1;
+            if (getElement(game, i, j) == ' ') {
+                System.out.println("Making move level \"easy\"");
+                readMove(game, i, j);
+                break;
+            }
+        }
+    }
+
     // establish game cycle of entering coordinates
-    public static void launchCycle(char[][] game) {
+    // TODO: rename this method
+    public static void getUserMove(char[][] game) {
         while (true) {
             System.out.print("Enter the coordinates: ");
             Scanner sc = new Scanner(System.in);
@@ -173,18 +185,33 @@ public class Main {
                 readMove(game, i, j);
                 break;
             }
+        }
+    }
 
+    // game cycle
+    public static void playGame() {
+        char[][] newGame = createBoard();
+        draw(newGame);
 
+        while (true) {
+            getUserMove(newGame);
+            draw(newGame);
+            String state1 = calcState(newGame);
+            if (!state1.equals("Game not finished")) {
+                System.out.println(state1);
+                break;
+            }
+            computerMakeMove(newGame);
+            draw(newGame);
+            String state2 = calcState(newGame);
+            if (!state2.equals("Game not finished")) {
+                System.out.println(state2);
+                break;
+            }
         }
     }
 
     public static void main(String[] args) {
-
-        char[][] newGame = createBoard();
-
-        draw(newGame);
-        launchCycle(newGame);
-        draw(newGame);
-        calcState(newGame);
+        playGame();
     }
 }
