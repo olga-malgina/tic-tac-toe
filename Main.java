@@ -204,7 +204,7 @@ public class Main {
         }
     }
 
-    // game cycle - this will be used as computer vs user
+    // game cycle for computer vs user
     public static void playComputerUser() {
         char[][] newGame = createBoard();
         draw(newGame);
@@ -227,25 +227,47 @@ public class Main {
         }
     }
 
-    // choosing the game mode. need to implement logic of infinite cycle which is broken only by exit?
-    public static void chooseMode() {
-        System.out.print("Input command: ");
-        Scanner sc = new Scanner(System.in);
-        String command = sc.next();
+    // game cycle for user vs user
+    public static void playUserUser() {
+        char[][] newGame = createBoard();
+        draw(newGame);
 
         while (true) {
+            getUserMove(newGame);
+            draw(newGame);
+            String state1 = calcState(newGame);
+            if (!state1.equals("Game not finished")) {
+                System.out.println(state1);
+                return;
+            }
+        }
+    }
+
+    // choosing the game mode. need to implement logic of infinite cycle which is broken only by exit?
+    public static void chooseMode() {
+
+
+        while (true) {
+            System.out.print("Input command: ");
+            Scanner sc = new Scanner(System.in);
+            String command = sc.next();
             if (command.equals("exit")) {
                 return;
             } else if (command.equals("start")) {
                 String player1 = sc.next();
                 String player2 = sc.next();
-                if (player2.equals(player1) && player2.equals("easy")) {
-                    playComputerComputer();
-                    return;
+                if (player1.isEmpty() || player2.isEmpty()) {
+                    System.out.println("Bad Parameters");
+                } else if (player2.equals(player1) && player2.equals("easy")) {
+                        playComputerComputer();
+                        //return;
                 } else if (player1.equals("easy") && player2.equals("user") ||
-                        player1.equals("user") && player2.equals("easy")) {
-                    playComputerUser();
-                    return;
+                            player1.equals("user") && player2.equals("easy")) {
+                        playComputerUser();
+                        //return;
+                } else if (player2.equals(player1) && player2.equals("user")) {
+                        playUserUser();
+                        //return;
                 } else {
                     System.out.println("Bad parameters!");
                 }
